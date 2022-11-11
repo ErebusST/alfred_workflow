@@ -11,7 +11,7 @@ def getParmeter(sql: str):
         group = match.group()
         field = group.removeprefix(":")
         # parameters.put("phone", phone);
-        parameters.append(" parameters.put(\"" + field + "\", " + field + ");")
+        parameters.append("parameters.put(\"" + field + "\", " + field + ");")
     return parameters
 
 
@@ -54,10 +54,11 @@ def toJava(sql: str):
         list.append("sbSql.append(\" " + line.removesuffix("\n") + " \");")
 
     parameters = getParmeter(sql)
-    if len(parameters) > 0:
+    parameter_size: int = len(parameters)
+    if parameter_size > 0:
         list.append("")
         list.append("")
-        list.append("Map<String, Object> parameters = new HashMap();");
+        list.append("Map<String, Object> parameters = new HashMap(" + str(parameter_size) + ");");
         for parameter in parameters:
             list.append(parameter)
     list.append("")
@@ -74,10 +75,10 @@ def toSql(javaCode: str):
 
 
 data = sys.argv[1]
-# path = "/Users/situ/Desktop/sql.sql"
-# file = open("/Users/situ/Desktop/sql.sql", "r", encoding="utf-8")
-# data = file.read()
-# print("输入的 sql:" + data)
+#path = "/Users/situ/Desktop/sql.sql"
+#file = open("/Users/situ/Desktop/sql.sql", "r", encoding="utf-8")
+#data = file.read()
+#print("输入的 sql:" + data)
 
 javaCode = isJavaCode(data)
 
