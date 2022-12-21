@@ -3,15 +3,18 @@ import re
 import sys
 
 
-def getParmeter(sql: str):
+def getParameter(sql: str):
+    temp: list[str] = []
     parameters: list[str] = []
     regex = r":[a-zA-Z]+\w*"
     matches = re.finditer(regex, sql, re.MULTILINE)
     for matchNum, match in enumerate(matches, start=1):
         group = match.group()
         field = group.removeprefix(":")
-        # parameters.put("phone", phone);
-        parameters.append("parameters.put(\"" + field + "\", " + field + ");")
+        if field not in temp:
+            temp.append(field)
+            # parameters.put("phone", phone);
+            parameters.append("parameters.put(\"" + field + "\", " + field + ");")
     return parameters
 
 
@@ -53,7 +56,7 @@ def toJava(sql: str):
         # sbSql.append(" UPDATE event_give_the_phone ");
         list.append("sbSql.append(\" " + line.removesuffix("\n") + " \");")
 
-    parameters = getParmeter(sql)
+    parameters = getParameter(sql)
     parameter_size: int = len(parameters)
     if parameter_size > 0:
         list.append("")
@@ -75,10 +78,10 @@ def toSql(javaCode: str):
 
 
 data = sys.argv[1]
-#path = "/Users/situ/Desktop/sql.sql"
-#file = open("/Users/situ/Desktop/sql.sql", "r", encoding="utf-8")
-#data = file.read()
-#print("输入的 sql:" + data)
+# path = "/Users/situ/Desktop/sql.sql"
+# file = open("/Users/situ/Desktop/sql.sql", "r", encoding="utf-8")
+# data = file.read()
+# print("输入的 sql:" + data)
 
 javaCode = isJavaCode(data)
 
