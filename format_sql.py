@@ -61,7 +61,7 @@ def toJava(sql: str):
     if parameter_size > 0:
         list.append("")
         list.append("")
-        list.append("Map<String, Object> parameters = new HashMap(" + str(parameter_size) + ");");
+        list.append("Map<String, Object> parameters = new HashMap(" + str(parameter_size) + ");")
         for parameter in parameters:
             list.append(parameter)
     list.append("")
@@ -72,7 +72,7 @@ def toSql(javaCode: str):
     lines: list[str] = fixSql(javaCode)
     list: list[str] = []
     for line in lines:
-        temp = line.strip().removeprefix("sbSql.append(\"").removesuffix(" \");")
+        temp = line.strip().removeprefix("sbSql.append(\"").removesuffix(" \");").removesuffix("\");")
         list.append(temp)
     return "\n".join(list)
 
